@@ -1,0 +1,31 @@
+apiVersion: skaffold/v1beta13
+kind: Config
+build:
+  artifacts:
+    - image: enginsgungor/user-svc
+      context: ./user-service/
+      sync:
+        manual:
+          - src: 'main.go'
+            dest: .
+    - image: enginsgungor/pub-svc
+      context: ./pub-service/
+      sync:
+        manual:
+          - src: 'main.go'
+            dest: .
+    - image: enginsgungor/order-svc
+      context: ./order-service/
+      sync:
+        manual:
+          - src: 'main.go'
+            dest: .
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/*
+portForward:
+  - resourceType: deployment
+    resourceName: my-service
+    port: 8000
+    localPort: 9500

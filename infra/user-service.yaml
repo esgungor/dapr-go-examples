@@ -1,0 +1,43 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: user-service
+  namespace: dapr-example
+  labels:
+    app: user-svc
+spec:
+  selector:
+    app: user-svc
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+  namespace: dapr-example
+  labels:
+    app: user-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-svc
+  template:
+    metadata:
+      labels:
+        app: user-svc
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "user-service"
+        dapr.io/app-port: "5000"
+    spec:
+      containers:
+      - name: user-svc
+        image: enginsgungor/user-svc
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: Always

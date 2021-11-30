@@ -1,0 +1,43 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: order-service
+  namespace: dapr-example
+  labels:
+    app: order-svc
+spec:
+  selector:
+    app: order-svc
+  ports:
+  - protocol: TCP
+    port: 5000
+    targetPort: 5000
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+  namespace: dapr-example
+  labels:
+    app: order-svc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-svc
+  template:
+    metadata:
+      labels:
+        app: order-svc
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "order-service"
+        dapr.io/app-port: "5000"
+    spec:
+      containers:
+      - name: order-svc
+        image: enginsgungor/order-svc
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: Always
