@@ -9,7 +9,28 @@ The project has 3 service now. Services simply implies State Management, Pub-Sub
 <th>Endpoints</th>
 
 </tr>
-<td>H</td>
+<td>Order Service</td>
+<td>
+POST /listen which is listening events from pub-service.
+</td>
 </tr>
 
+</tr>
+<td>Publish Service</td>
+<td>
+POST / Send predefined event to order service from redis.
+</br>
+GET /secret Dynamically fetch Kubernetes Secret.
+</td>
+</tr>
+
+</tr>
+<td>User Service</td>
+<td>
+POST /add Create state in redis store
+</br>
+GET / Read data from Redis Store. You could change with query string to get value of desired key.
+
+</td>
+</tr>
 </table>
